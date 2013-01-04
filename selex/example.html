@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <title>Selex Example</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/selex.css" type="text/css">
+        <script src="js/selex.js" type="text/javascript"></script>
+    </head>
+    <div class="wrap">
+        <div id="example1" class="example">
+            <div class="selex1"></div>
+        </div>
+        <div id="example2" class="example">
+            <div class="selex2"></div>
+        </div>
+        <div id="example3" class="example">
+            <div class="selex3"></div>
+        </div>
+    </div>
+    
+    <body></body>
+
+</html>
+<script>
+    var nSel3 = $('.selex3').selex("More Snippets", {
+        options: {
+           "1" : "An Item",
+           "2" : "Sweet things",
+           "3" : "Cool thing",
+           "4" : "Another thing",
+           "5" : "Other Stuff"
+        },
+        icon: "&#9660;",
+        filter: true,
+        multi: true,
+        url: "php/selex.php",
+        onChange: function (items, toggled, value) {
+            // console.log(items,toggled,value);
+        },
+        onFilter: function (val, response) {
+            //console.log(val,response);
+        }
+    });
+</script>
