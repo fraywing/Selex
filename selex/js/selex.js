@@ -25,6 +25,7 @@ licensed under MIT
             $(this).find('.nArrow').html(options.icon);
             $(this).find('.nText').html(title);
             $(this).find('.nSelect').attr('id', options.id).data().options = options; //add the generated ID
+             $(this).find('.nSelect').data().id = options.id;
             if(options.theme){
                  $(this).find('.nSelect').addClass(options.theme);
             }
@@ -78,10 +79,11 @@ licensed under MIT
                 $(this).parent().find('.nContainer').removeClass('nContainerSel');
                 $(this).parent().find('.nArrow').removeClass('nSelected');
             })
-                .find('.selItem').click(function () { //each item
+                .delegate('.selItem','click', function () { //each item
                 //console.log($(this).attr('value'));
                 var dat = $(this).parents('.nSelect').data();
                 var selected = $(this).hasClass('nItemSelected') ? true : false;
+                console.log(dat);
                 if(dat.list !== undefined){
                 var multi = dat.list; //if multi is disabled, only returns a single item at a time, else an object of them
                 }
@@ -92,17 +94,24 @@ licensed under MIT
                        
                     }
                     if (multi === undefined) {
-                        $(this).parent().find('.selItem').removeClass('nItemSelected');
+                      
+                        $(this).parents('.selHolder').find('.selItem').each(function(){
+                            $(this).removeClass('nItemSelected');
+                            console.log($(this).attr('value'));
+                        });
                     }else{
                          multi[$(this).attr('value')] = $(this).html();
                     }
+                     if (dat.options.onChange !== undefined) {
                      dat.options.onChange(inf, !selected, $(this).attr('value'));
-
+                     }
                     $(this).addClass('nItemSelected');
                 } else {
                    
-                    if (multi === undefined) { 
-                        $(this).parent().find('.selItem').removeClass('nItemSelected');
+                    if (multi === undefined) {
+                        console.log($(this).parents('.selHolder').find('.nItemSelected'));
+                         $(this).parent().find('.nItemSelected').removeClass('nItemSelected');
+                        
                     } else {
                          delete(multi[$(this).attr('value')]);
                         $(this).removeClass('nItemSelected');
@@ -144,11 +153,12 @@ licensed under MIT
                             }
                             if (data || data.options) {
                                 var dat = data !== undefined ? data : data.options;
-                                //console.log(ndat);
-                                self.find('.selHolder').html(methods.giveItems(data),ndat.list);
+                                var nop = ndat;
+                                nop.options.options = data;
+                                $('#'+ndat.id).find('.selHolder').html(methods.giveItems(nop.options.options,ndat.list));
                             }
                             clearTimeout(methods.tim);
-                        });
+                        }, "json");
                         clearTimeout(methods.tim);
                     }, 400);
                 }).keydown(function () {
